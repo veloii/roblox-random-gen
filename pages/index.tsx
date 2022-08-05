@@ -104,7 +104,7 @@ export default function IndexPage() {
         <div className="space-y-7">
           <div>
             <h1 className="text-5xl text-center text-blue-900 dark:text-white font-bold transition">
-              Random Roblox Game Generator
+              Random Roblox Game
             </h1>
             <p className="text-center dark:text-white text-xl pt-2 transition">
               made with ❤️ by{" "}
