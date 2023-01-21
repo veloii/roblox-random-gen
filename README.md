@@ -1,5 +1,5 @@
 # Random roblox game generator
-Built with [Next.js](https://nextjs.org) and [TailwindCSS](https://tailwindcss.com)
+Built with [Next.js](https://nextjs.org) and [TailwindCSS](https://tailwindcss.com).
 
 ## Running
 
