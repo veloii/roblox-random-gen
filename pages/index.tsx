@@ -114,7 +114,7 @@ export default function IndexPage() {
       <div className="h-screen w-screen flex justify-center items-center dark:bg-slate-900 transition">
         <div className="space-y-7">
           <div>
-            <h1 className="text-5xl text-center text-blue-900 dark:text-white font-bold transition">
+            <h1 className="text-3xl md:text-5xl text-center text-blue-900 dark:text-white font-bold transition">
               Random Roblox Game
             </h1>
             <p className="text-center dark:text-white text-xl pt-2 transition">
@@ -129,7 +129,7 @@ export default function IndexPage() {
             </p>
           </div>
           <div className="flex justify-center items-center w-full">
-            <div className="bg-slate-50 dark:text-white dark:bg-slate-800 rounded-md p-5 flex gap-4 transition">
+            <div className="bg-slate-50 dark:text-white dark:bg-slate-800 rounded-md p-5 flex flex-col md:flex-row gap-4 transition">
               {game ? (
                 <img
                   className="rounded-md w-[150px] h-[150px] shadow"
@@ -141,13 +141,13 @@ export default function IndexPage() {
               <div className="space-y-2">
                 <div>
                   {game ? (
-                    <h2 className="text-xl font-bold">{game?.name}</h2>
+                    <h2 className="md:text-xl font-bold">{game?.name}</h2>
                   ) : (
                     <div className="animate-pulse w-1/2 h-7 dark:bg-gray-700 bg-gray-300 rounded"></div>
                   )}
                 </div>
                 <div>
-                  <p className="text-ellipsis w-[500px] h-16 overflow-y-auto whitespace-pre-wrap text-sm">
+                  <p className="text-ellipsis md:w-[500px] h-24 md:h-16 overflow-y-auto whitespace-pre-wrap text-sm">
                     {game ? (
                       game?.desc
                     ) : (
