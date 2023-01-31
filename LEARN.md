@@ -8,3 +8,5 @@ When a user presses the new game button it sends a request to `/api/get-random` 
 ### Check it out at [random-roblox-game.vercel.app](https://random-roblox-game.vercel.app)
 
 On this preview site you'll see that if no api calls have been made for a short period the memory cache will be cleared but once it takes a while to fetch the first game the rest of the requests that are in that close time period should be fairly fast.
+
+NOTE: I have put in a slight delay between how fast you can generate to keep it from slowing down
