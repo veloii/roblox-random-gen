@@ -1,9 +1,18 @@
 import { useEffect, useState } from "react";
 import { Game } from "../types";
+import {
+  ArrowUpRightIcon,
+  CheckIcon,
+  ClipboardIcon,
+  PlayIcon,
+} from "@heroicons/react/20/solid";
+import { PlusIcon } from "@heroicons/react/24/solid";
+import Image from "next/image";
 
 export default function IndexPage() {
   const [game, setGame] = useState<Game | undefined>();
   const [cooldown, setCooldown] = useState(true);
+  const [copied, setCopied] = useState(false);
 
   useEffect(() => {
     const themeToggleDarkIcon = document.getElementById(
@@ -19,8 +28,10 @@ export default function IndexPage() {
       (!("color-theme" in localStorage) &&
         window.matchMedia("(prefers-color-scheme: dark)").matches)
     ) {
+      document.documentElement.classList.add("dark");
       themeToggleLightIcon.classList.remove("hidden");
     } else {
+      document.documentElement.classList.remove("dark");
       themeToggleDarkIcon.classList.remove("hidden");
     }
 
@@ -109,15 +120,15 @@ export default function IndexPage() {
             <p className="text-center dark:text-white text-xl pt-2 transition">
               made with ❤️ by{" "}
               <a
-                href="https://zelr.me"
-                className="text-blue-600 hover:text-blue-900 transition font-semibold dark:text-blue-400 dark:hover:text-blue-500"
+                href="https://portfolio-zelr.vercel.app/"
+                className="text-red-600 hover:text-red-900 transition font-semibold dark:text-red-400 dark:hover:text-red-500"
                 target="_blank"
               >
                 zelr
               </a>
             </p>
           </div>
-          <div className="flex justify-center items-center">
+          <div className="flex justify-center items-center w-full">
             <div className="bg-slate-50 dark:text-white dark:bg-slate-800 rounded-md p-5 flex gap-4 transition">
               {game ? (
                 <img
@@ -125,41 +136,76 @@ export default function IndexPage() {
                   src={game?.image}
                 />
               ) : (
-                <div className="animate-pulse w-[150px] h-[150px] bg-gray-300 rounded"></div>
+                <div className="animate-pulse w-[150px] h-[150px] dark:bg-gray-700 bg-gray-300 rounded"></div>
               )}
               <div className="space-y-2">
                 <div>
                   {game ? (
                     <h2 className="text-xl font-bold">{game?.name}</h2>
                   ) : (
-                    <div className="animate-pulse w-1/2 h-7 bg-gray-300 rounded"></div>
+                    <div className="animate-pulse w-1/2 h-7 dark:bg-gray-700 bg-gray-300 rounded"></div>
                   )}
                 </div>
                 <div>
-                  <p className="text-ellipsis w-[500px] h-16 overflow-hidden whitespace-pre-wrap text-sm">
+                  <p className="text-ellipsis w-[500px] h-16 overflow-y-auto whitespace-pre-wrap text-sm">
                     {game ? (
                       game?.desc
                     ) : (
                       <div className="space-y-1">
-                        <div className="animate-pulse w-1/6 h-4 bg-gray-300 rounded"></div>
-                        <div className="animate-pulse w-full h-4 bg-gray-300 rounded"></div>
-                        <div className="animate-pulse w-5/6 h-4 bg-gray-300 rounded"></div>
+                        <div className="animate-pulse w-1/6 h-4 dark:bg-gray-700 bg-gray-300 rounded"></div>
+                        <div className="animate-pulse w-full h-4 dark:bg-gray-700 bg-gray-300 rounded"></div>
+                        <div className="animate-pulse w-5/6 h-4 dark:bg-gray-700 bg-gray-300 rounded"></div>
                       </div>
                     )}
                   </p>
                 </div>
-                <div>
+                <div className="space-x-2 flex">
                   {game ? (
-                    <a
-                      target="_blank"
-                      href={`https://www.roblox.com/games/${game.placeId}`}
-                    >
-                      <button className="bg-green-700 hover:bg-green-500 font-semibold duration-300 transition p-2 px-6 rounded-lg text-white">
-                        ▶️ Play
-                      </button>
-                    </a>
+                    <>
+                      <a
+                        target="_blank"
+                        className="bg-green-700 flex gap-2 items-center hover:bg-green-500 font-semibold duration-300 transition p-2 px-6 rounded-lg text-white"
+                        href={`roblox://placeId=${game.placeId}`}
+                      >
+                        <PlayIcon height={20} /> Play
+                      </a>
+                      <a
+                        target="_blank"
+                        className="bg-gray-700 flex gap-2 items-center hover:bg-gray-500 font-semibold duration-300 transition p-2 px-4 rounded-lg text-white"
+                        href={`https://www.roblox.com/games/${game.placeId}`}
+                      >
+                        <ArrowUpRightIcon height={20} /> Open Link
+                      </a>
+                      <a
+                        className="bg-gray-700 cursor-pointer flex gap-2 items-center hover:bg-gray-500 font-semibold duration-300 transition p-2 px-4 rounded-lg text-white"
+                        onClick={() => {
+                          setCopied(true);
+                          navigator.clipboard.writeText(
+                            `https://www.roblox.com/games/${game.placeId}`
+                          );
+                          setTimeout(() => setCopied(false), 1000);
+                        }}
+                      >
+                        <CheckIcon
+                          className={`absolute ${
+                            copied ? "opacity-100" : "opacity-0"
+                          } transition`}
+                          height={20}
+                        />
+                        <ClipboardIcon
+                          className={`${
+                            copied ? "opacity-0" : "opacity-100"
+                          } transition`}
+                          height={20}
+                        />
+                      </a>
+                    </>
                   ) : (
-                    <div className="animate-pulse w-20 h-10 bg-gray-300 rounded-lg"></div>
+                    <>
+                      <div className="animate-pulse w-28 h-10 dark:bg-gray-700 bg-gray-300 rounded-lg"></div>
+                      <div className="animate-pulse w-32 h-10 dark:bg-gray-700 bg-gray-300 rounded-lg"></div>
+                      <div className="animate-pulse w-14 h-10 dark:bg-gray-700 bg-gray-300 rounded-lg"></div>
+                    </>
                   )}
                 </div>
               </div>
@@ -168,10 +214,10 @@ export default function IndexPage() {
           <div className="flex justify-center items-center">
             <button
               disabled={cooldown}
-              className="bg-blue-900 hover:bg-blue-700 disabled:opacity-50 font-semibold duration-300 transition p-2 px-6 rounded-lg text-white"
+              className="bg-red-900 hover:bg-red-700 flex gap-2 items-center disabled:opacity-50 active:scale-95 font-semibold duration-300 transition p-3 px-6 rounded-lg text-white"
               onClick={() => getRandomGame()}
             >
-              + New Game
+              <PlusIcon height={24} /> New Game
             </button>
           </div>
         </div>
