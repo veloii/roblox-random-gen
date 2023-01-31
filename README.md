@@ -4,9 +4,9 @@ Generates a random roblox game from the front page. Uses caching for a a fast ex
 
 Built with [Next.js](https://nextjs.org) and [TailwindCSS](https://tailwindcss.com).
 
-<!-- ## Preview
+## Preview
 
-Preview of site is available at [https://roblox-random/] -->
+Preview of site is available at [random-roblox-game.vercel.app](https://random-roblox-game.vercel.app).
 
 ## Running
 
