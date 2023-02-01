@@ -84,7 +84,7 @@ export default function IndexPage() {
 
   return (
     <>
-      <div className="absolute top-0 right-0 p-5">
+      <div className="md:absolute dark:bg-slate-900 transition top-0 right-0 px-5 pt-3 md:p-5">
         <button
           id="theme-toggle"
           type="button"
@@ -114,7 +114,7 @@ export default function IndexPage() {
           </svg>
         </button>
       </div>
-      <div className="h-screen w-screen flex justify-center items-center dark:bg-slate-900 transition">
+      <div className="min-h-screen pb-10 md:py-0 w-screen flex justify-center items-center dark:bg-slate-900 transition">
         <div className="space-y-7">
           <div>
             <h1 className="text-3xl pointer-events-none md:text-5xl text-center text-red-600 dark:text-white font-bold transition">
@@ -145,27 +145,34 @@ export default function IndexPage() {
               </p>
             </div>
           </div>
-          <div className="flex justify-center items-center w-full">
-            <div className="bg-slate-50 border dark:border-slate-700 dark:text-white dark:bg-slate-800  rounded-md p-5 flex flex-col md:flex-row gap-4 transition">
+          <div className="flex px-5 md:px-0 justify-center items-center">
+            <div className="bg-slate-50 w-full border px-1 md:px-0 pt-4 md:pt-0 dark:border-slate-700 dark:text-white dark:bg-slate-800 items-center md:items-start rounded-2xl flex flex-col md:flex-row gap-4 transition">
               {game ? (
-                <img
+                <Image
                   draggable="false"
-                  className="rounded-lg w-[150px] h-[150px] shadow"
+                  layout="fixed"
+                  height={180}
+                  width={180}
+                  className="md:rounded-r-none rounded-2xl object-fill shadow dark:bg-slate-700 bg-slate-300"
                   src={game?.image}
                 />
               ) : (
-                <div className="animate-pulse w-[150px] h-[150px] dark:bg-slate-700 bg-slate-300 rounded-lg"></div>
+                <div className="animate-pulse h-[180px] w-[180px] md:rounded-r-none rounded-2xl dark:bg-slate-700 bg-slate-300"></div>
               )}
-              <div className="space-y-2">
+              <div className="space-y-2 p-4 px-2">
                 <div className="pointer-events-none">
                   {game ? (
-                    <h2 className={`font-bold md:text-xl`}>{game?.name}</h2>
+                    <h2
+                      className={`font-bold md:text-xl w-[300px] md:w-[500px]`}
+                    >
+                      {game?.name}
+                    </h2>
                   ) : (
-                    <div className="animate-pulse w-1/2 h-7 dark:bg-slate-700 bg-slate-300 rounded"></div>
+                    <div className="animate-pulse w-[300px] md:w-[500px] h-7 dark:bg-slate-700 bg-slate-300 rounded"></div>
                   )}
                 </div>
                 <div className="pointer-events-none">
-                  <p className="text-ellipsis md:w-[500px] h-24 md:h-16 overflow-y-auto whitespace-pre-wrap text-sm">
+                  <p className="text-ellipsis md:w-[500px] w-full h-24 md:h-16 overflow-x-auto overflow-y-auto whitespace-pre-wrap text-sm">
                     {game ? (
                       game?.desc ? (
                         game?.desc
@@ -181,12 +188,12 @@ export default function IndexPage() {
                     )}
                   </p>
                 </div>
-                <div className="space-x-2 flex">
+                <div className="gap-2 flex flex-col md:flex-row md:px-0 px-1">
                   {game ? (
                     <>
                       <a
                         draggable="false"
-                        className="dark:bg-green-700 active:opacity-50 bg-green-500 hover:bg-green-400 flex gap-2 items-center dark:hover:bg-green-500 font-semibold duration-300 transition p-2 px-6 rounded-xl text-white"
+                        className="dark:bg-green-700 flex-grow md:flex-grow-0 justify-center active:opacity-50 bg-green-500 hover:bg-green-400 flex gap-2 items-center dark:hover:bg-green-500 font-semibold duration-300 transition p-2 px-6 rounded-xl text-white"
                         href={`roblox://placeId=${game.placeId}`}
                       >
                         <PlayIcon height={20} /> Play
@@ -194,14 +201,14 @@ export default function IndexPage() {
                       <a
                         draggable="false"
                         target="_blank"
-                        className="dark:bg-slate-700 active:opacity-50 flex gap-2 items-center dark:hover:bg-slate-500 bg-slate-200 hover:bg-slate-300 font-semibold duration-300 transition p-2 px-4 rounded-xl dark:text-white"
+                        className="dark:bg-slate-700 flex-grow md:flex-grow-0 justify-center active:opacity-50 flex gap-2 items-center dark:hover:bg-slate-500 bg-slate-200 hover:bg-slate-300 font-semibold duration-300 transition p-2 px-4 rounded-xl dark:text-white"
                         href={`https://www.roblox.com/games/${game.placeId}`}
                       >
                         <ArrowUpRightIcon height={20} /> Open Link
                       </a>
                       <a
                         draggable="false"
-                        className="dark:bg-slate-700 active:opacity-50 bg-slate-200 hover:bg-slate-300 cursor-pointer flex gap-2 items-center dark:hover:bg-slate-500 font-semibold duration-300 transition p-2 px-4 rounded-xl dark:text-white"
+                        className="dark:bg-slate-700 flex-grow md:flex-grow-0 justify-center active:opacity-50 bg-slate-200 hover:bg-slate-300 cursor-pointer flex gap-2 items-center dark:hover:bg-slate-500 font-semibold duration-300 transition p-2 px-4 rounded-xl dark:text-white"
                         onClick={() => {
                           setCopied(true);
                           navigator.clipboard.writeText(
@@ -226,9 +233,9 @@ export default function IndexPage() {
                     </>
                   ) : (
                     <>
-                      <div className="animate-pulse w-28 h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
-                      <div className="animate-pulse w-[8.5rem] h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
-                      <div className="animate-pulse w-12 h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
+                      <div className="animate-pulse flex-grow md:flex-grow-0 md:w-28 h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
+                      <div className="animate-pulse flex-grow md:flex-grow-0 md:w-[8.5rem] h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
+                      <div className="animate-pulse flex-grow md:flex-grow-0 md:w-12 h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
                     </>
                   )}
                 </div>
