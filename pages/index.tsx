@@ -13,6 +13,7 @@ export default function IndexPage() {
   const [game, setGame] = useState<Game | undefined>();
   const [cooldown, setCooldown] = useState(true);
   const [copied, setCopied] = useState(false);
+  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
     const themeToggleDarkIcon = document.getElementById(
@@ -68,7 +69,9 @@ export default function IndexPage() {
   const getRandomGame = async () => {
     setCooldown(true);
     setGame(undefined);
-    const req = await fetch("/api/get-random");
+    const req = await fetch(
+      `/api/get-random?popular=${checked ? "yes" : "no"}`
+    );
     if (!req.ok) return;
     const reqJson = await req.json();
     setGame(reqJson);
@@ -211,7 +214,23 @@ export default function IndexPage() {
               </div>
             </div>
           </div>
-          <div className="flex justify-center items-center">
+          <div className="flex flex-col gap-2 justify-center items-center">
+            <div className="flex justify-center">
+              <div>
+                <input
+                  onChange={(event) => setChecked(event.target.checked)}
+                  className="form-check-input h-4 w-4 border border-gray-300 rounded-sm bg-white checked:bg-blue-600 checked:border-blue-600 focus:outline-none transition duration-200 mt-1 align-top bg-no-repeat bg-center bg-contain float-left mr-2 cursor-pointer"
+                  type="checkbox"
+                  checked={checked}
+                />
+                <label
+                  className="form-check-label inline-block text-gray-800 dark:text-gray-100"
+                  htmlFor="flexCheckDefault"
+                >
+                  Frontpage games only
+                </label>
+              </div>
+            </div>
             <button
               disabled={cooldown}
               className="bg-red-900 hover:bg-red-700 flex gap-2 items-center disabled:opacity-50 active:scale-95 font-semibold duration-300 transition p-3 px-6 rounded-lg text-white"
