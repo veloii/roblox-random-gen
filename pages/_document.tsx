@@ -2,9 +2,46 @@ import { Html, Head, Main, NextScript } from "next/document";
 
 export default function Document() {
   return (
-    <Html>
+    <Html lang="en">
       <Head>
-        <link rel="stylesheet" href="https://rsms.me/inter/inter.css" />
+        <script
+          dangerouslySetInnerHTML={{
+            __html: `</script><link rel='preload' href='https://rsms.me/inter/inter.css' as='style' onload="this.onload=null;this.rel='stylesheet'"/><script>`,
+          }}
+        />
+        <link rel="preconnect" href="https://vitals.vercel-insights.com" />
+        <meta
+          name="description"
+          content="Generate a random Roblox game in seconds."
+        />
+
+        <meta
+          property="og:url"
+          content="https://random-roblox-game.vercel.app/"
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content="Roblox Random Game Generator" />
+        <meta
+          property="og:description"
+          content="Generate a random Roblox game in seconds."
+        />
+        <meta property="og:image" content="/og.png" />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta
+          property="twitter:domain"
+          content="random-roblox-game.vercel.app"
+        />
+        <meta
+          property="twitter:url"
+          content="https://random-roblox-game.vercel.app/"
+        />
+        <meta name="twitter:title" content="Roblox Random Game Generator" />
+        <meta
+          name="twitter:description"
+          content="Generate a random Roblox game in seconds."
+        />
+        <meta name="twitter:image" content="/og.png" />
       </Head>
       <body>
         <Main />

@@ -88,6 +88,7 @@ export default function IndexPage() {
         <button
           id="theme-toggle"
           type="button"
+          aria-label="Light / Dark Mode Toggle"
           className="text-slate-500 dark:text-slate-400 hover:bg-slate-100 active:opacity-50 dark:hover:bg-slate-700 focus:outline-none transition focus:ring-slate-200 dark:focus:ring-slate-700 rounded-lg text-sm p-2.5"
         >
           <svg
@@ -149,6 +150,7 @@ export default function IndexPage() {
             <div className="bg-slate-50 w-full border px-1 md:px-0 pt-4 md:pt-0 dark:border-slate-700 dark:text-white dark:bg-slate-800 items-center md:items-start rounded-2xl flex flex-col md:flex-row gap-4 transition">
               {game ? (
                 <Image
+                  alt="Roblox Game Thumbnail"
                   draggable="false"
                   layout="fixed"
                   height={180}
@@ -206,7 +208,8 @@ export default function IndexPage() {
                       >
                         <ArrowUpRightIcon height={20} /> Open Link
                       </a>
-                      <a
+                      <button
+                        aria-label="Play"
                         draggable="false"
                         className="dark:bg-slate-700 flex-grow md:flex-grow-0 justify-center active:opacity-50 bg-slate-200 hover:bg-slate-300 cursor-pointer flex gap-2 items-center dark:hover:bg-slate-500 font-semibold duration-300 transition p-2 px-4 rounded-xl dark:text-white"
                         onClick={() => {
@@ -229,7 +232,7 @@ export default function IndexPage() {
                           } transition`}
                           height={20}
                         />
-                      </a>
+                      </button>
                     </>
                   ) : (
                     <>
@@ -257,15 +260,20 @@ export default function IndexPage() {
                   className="checked:bg-red-500 transition-all ease-in-out dark:checked:bg-red-500 outline-none focus:outline-none right-4 checked:right-0 duration-200 absolute block w-6 h-6 rounded-full dark:bg-slate-900 bg-white border-4 dark:border-slate-700 appearance-none cursor-pointer"
                 />
                 <label
+                  aria-label="Frontpage games only toggle"
                   htmlFor="toggle"
                   className="block h-6 overflow-hidden bg-slate-300 dark:bg-slate-800 rounded-full cursor-pointer"
                 ></label>
               </div>
-              <span className="font-medium text-slate-400 pointer-events-none">
+              <span
+                aria-label="Frontpage games only toggle"
+                className="font-medium text-slate-400 pointer-events-none"
+              >
                 Frontpage games only
               </span>
             </div>
             <button
+              aria-label="New Game"
               disabled={cooldown}
               className={`dark:bg-red-900 relative group disabled:pointer-events-none disabled:opacity-50 mt-5 dark:hover:bg-red-700 bg-red-500 hover:bg-red-400 flex gap-2 items-center active:opacity-50 font-semibold duration-300 transition p-3 px-6 rounded-2xl text-white ${
                 !game && "pointer-events-none"
