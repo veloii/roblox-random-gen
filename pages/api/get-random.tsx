@@ -4,43 +4,61 @@ import { Game } from "../../types";
 import cacheData from "memory-cache";
 
 const CACHE_DURATION = 24 * 60 * 60 * 1000;
-const MAX_UNIVERSE_ID = 8915048233;
-const BATCH_SIZE = 50;
+const MAX_UNIVERSE_ID = 12000800000;
+const BATCH_SIZE = 10;
+const MAX_RETRIES = 2;
 const DEFAULT_THUMBNAIL_SIZE = "150x150";
+const REQUEST_TIMEOUT = 5000;
 
 interface CachedResponse {
   statusCode: number;
   json: any;
 }
 
-async function fetchWithCache(url: string): Promise<CachedResponse> {
+async function fetchWithTimeout(url: string, timeout: number) {
+  try {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), timeout);
+    
+    const res = await request(url, { signal: controller.signal });
+    clearTimeout(timeoutId);
+    
+    return res;
+  } catch (error) {
+    return null;
+  }
+}
+
+async function fetchWithCache(url: string): Promise<CachedResponse | null> {
   const cached = cacheData.get(url);
   if (cached) return cached;
 
-  const res = await request(url);
-  const json = await res.body.json();
-  const data = { statusCode: res.statusCode, json };
-  
-  cacheData.put(url, data, CACHE_DURATION);
-  return data;
+  const res = await fetchWithTimeout(url, REQUEST_TIMEOUT);
+  if (!res) return null;
+
+  try {
+    const json = await res.body.json();
+    const data = { statusCode: res.statusCode, json };
+    cacheData.put(url, data, CACHE_DURATION);
+    return data;
+  } catch {
+    return null;
+  }
 }
 
 async function getGameStats(universeId: string) {
   try {
-    const { json, statusCode } = await fetchWithCache(
-      `https://games.roblox.com/v1/games/${universeId}/game-passes?limit=10&sortOrder=Asc`
-    );
+    const [passesResponse, gameResponse] = await Promise.all([
+      fetchWithCache(`https://games.roblox.com/v1/games/${universeId}/game-passes?limit=10&sortOrder=Asc`),
+      fetchWithTimeout(`https://games.roblox.com/v1/games?universeIds=${universeId}`, REQUEST_TIMEOUT)
+    ]);
     
-    if (statusCode !== 200) return null;
+    if (!passesResponse || !gameResponse) return null;
     
-    const { body } = await request(
-      `https://games.roblox.com/v1/games?universeIds=${universeId}`
-    );
-    const gameData = await body.json();
+    const gameData = await gameResponse.body.json();
+    const game = gameData.data?.[0];
+    if (!game) return null;
     
-    if (!gameData.data?.[0]) return null;
-    
-    const game = gameData.data[0];
     return {
       playing: game.playing || 0,
       visits: game.visits || 0,
@@ -48,7 +66,7 @@ async function getGameStats(universeId: string) {
       maxPlayers: game.maxPlayers || 0,
       created: game.created || '',
       updated: game.updated || '',
-      gamePasses: json.data?.length || 0
+      gamePasses: passesResponse.json.data?.length || 0
     };
   } catch {
     return null;
@@ -56,48 +74,47 @@ async function getGameStats(universeId: string) {
 }
 
 async function getUniverseId(universeId: string) {
-  const { body, statusCode } = await request(
-    `https://games.roblox.com/v1/games?universeIds=${universeId}`
+  const res = await fetchWithTimeout(
+    `https://games.roblox.com/v1/games?universeIds=${universeId}`,
+    REQUEST_TIMEOUT
   );
-  if (statusCode !== 200) return null;
+  if (!res) return null;
   
-  const json = await body.json();
-  return json.data?.[0] || null;
+  try {
+    const json = await res.body.json();
+    return json.data?.[0] || null;
+  } catch {
+    return null;
+  }
 }
 
 async function getImage(universeId: string) {
-  const { json, statusCode } = await fetchWithCache(
+  const response = await fetchWithCache(
     `https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=${DEFAULT_THUMBNAIL_SIZE}&format=Png&isCircular=false`
   );
-  return statusCode === 200 ? json.data?.[0]?.imageUrl : null;
+  return response?.statusCode === 200 ? response.json.data?.[0]?.imageUrl : null;
 }
 
-async function getPlayable(universeId: string) {
-  const { body, statusCode } = await request(
-    `https://games.roblox.com/v1/games/multiget-playability-status?universeIds=${universeId}`
-  );
-  if (statusCode !== 200) return false;
-  
-  const json = await body.json();
-  return json[0]?.playabilityStatus === "GuestProhibited";
-}
+async function getTruelyRandomGame(retryCount = 0): Promise<Game | null> {
+  if (retryCount >= MAX_RETRIES) {
+    return null;
+  }
 
-async function getTruelyRandomGame(): Promise<Game | null> {
   const gamePromises = Array(BATCH_SIZE).fill(null).map(() => 
     getUniverseId(Math.floor(Math.random() * MAX_UNIVERSE_ID + 1).toString())
   );
 
   const games = await Promise.all(gamePromises);
-  
-  for (const game of games.filter(Boolean)) {
-    if (!game?.name.includes("Place")) {
-      const [playable, imageUrl, stats] = await Promise.all([
-        getPlayable(game.id.toString()),
+  const validGames = games.filter(game => game && !game.name.includes("Place"));
+
+  for (const game of validGames) {
+    try {
+      const [imageUrl, stats] = await Promise.all([
         getImage(game.id),
         getGameStats(game.id.toString())
       ]);
 
-      if (playable && imageUrl && stats) {
+      if (imageUrl && stats) {
         return {
           name: game.name,
           creatorName: game.creator.name,
@@ -109,35 +126,44 @@ async function getTruelyRandomGame(): Promise<Game | null> {
           stats
         };
       }
+    } catch {
+      continue;
     }
   }
 
-  return getTruelyRandomGame();
+  return getTruelyRandomGame(retryCount + 1);
 }
 
 async function getPopularGame() {
-  const { json, statusCode } = await fetchWithCache(
+  const response = await fetchWithCache(
     "https://games.roblox.com/v1/games/list?model.sortToken=PopularStandardized"
   );
 
-  if (statusCode !== 200) return null;
+  if (!response || response.statusCode !== 200) return null;
 
-  const game = json.games[Math.floor(Math.random() * json.games.length)];
-  const imageUrl = await getImage(game.universeId);
-  const stats = await getGameStats(game.universeId.toString());
+  const game = response.json.games[Math.floor(Math.random() * response.json.games.length)];
+  
+  try {
+    const [imageUrl, stats] = await Promise.all([
+      getImage(game.universeId),
+      getGameStats(game.universeId.toString())
+    ]);
 
-  return {
-    name: game.name,
-    creatorName: game.creatorName,
-    price: game.price,
-    desc: game.gameDescription,
-    universeId: game.universeId,
-    placeId: game.placeId,
-    image: imageUrl,
-    stats,
-    totalUpVotes: game.totalUpVotes,
-    totalDownVotes: game.totalDownVotes
-  };
+    return {
+      name: game.name,
+      creatorName: game.creatorName,
+      price: game.price,
+      desc: game.gameDescription,
+      universeId: game.universeId,
+      placeId: game.placeId,
+      image: imageUrl,
+      stats,
+      totalUpVotes: game.totalUpVotes,
+      totalDownVotes: game.totalDownVotes
+    };
+  } catch {
+    return null;
+  }
 }
 
 export default async function handler(
@@ -145,6 +171,9 @@ export default async function handler(
   res: NextApiResponse
 ) {
   try {
+    // Set response timeout header
+    res.setHeader('Cache-Control', 's-maxage=3600');
+    
     const game = req.query["popular"] === "yes" 
       ? await getPopularGame()
       : await getTruelyRandomGame();
