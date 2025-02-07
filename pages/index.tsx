@@ -15,7 +15,7 @@ export default function IndexPage() {
 
   const copyToClipboard = () => {
     if (game) {
-      navigator.clipboard.writeText(game.url);
+      navigator.clipboard.writeText(`https://www.roblox.com/games/${game.placeId}`);
       setCopied(true);
       setTimeout(() => setCopied(false), 2000);
     }
@@ -46,7 +46,7 @@ export default function IndexPage() {
             </div>
             <div className="mt-5 flex gap-4">
               <a
-                href={game.url}
+                href={`https://www.roblox.com/games/${game.placeId}`}
                 target="_blank"
                 className="flex items-center gap-2 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700 transition"
               >
