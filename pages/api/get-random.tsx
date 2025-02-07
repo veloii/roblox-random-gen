@@ -45,7 +45,7 @@ async function getRandomGame() {
     const games = await Promise.allSettled(universeIds.map(getUniverseId));
 
     for (const result of games) {
-      if (result.value) {
+      if (result.status === "fulfilled" && result.value) {
         const game = result.value;
         const imageUrl = await getImage(game.id);
 
