@@ -135,8 +135,6 @@ export default function IndexPage() {
               </a>
             </div>
           </div>
-        </div>
-      </div>
 
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden transition-colors duration-300">
             <div className="md:flex">
