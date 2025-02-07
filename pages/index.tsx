@@ -190,6 +190,50 @@ export default function IndexPage() {
                     )}
                   </p>
                 </div>
+                <div className="pointer-events-none">
+                  {game ? (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
+                      <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
+                        <div className="font-medium">👥 Playing</div>
+                        <div>{game.stats.playing.toLocaleString()}</div>
+                      </div>
+                      <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
+                        <div className="font-medium">👀 Visits</div>
+                        <div>{game.stats.visits.toLocaleString()}</div>
+                      </div>
+                      <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
+                        <div className="font-medium">⭐ Favorites</div>
+                        <div>{game.stats.favoritedCount?.toLocaleString() || 'N/A'}</div>
+                      </div>
+                      <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
+                        <div className="font-medium">🎮 Max Players</div>
+                        <div>{game.maxPlayers}</div>
+                      </div>
+                      <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
+                        <div className="font-medium">📅 Created</div>
+                        <div>{new Date(game.created).toLocaleDateString()}</div>
+                      </div>
+                      <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
+                        <div className="font-medium">🔄 Updated</div>
+                        <div>{new Date(game.updated).toLocaleDateString()}</div>
+                      </div>
+                      <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
+                        <div className="font-medium">🎨 Genre</div>
+                        <div>{game.genre_l2 || game.genre_l1 || game.genre}</div>
+                      </div>
+                      <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
+                        <div className="font-medium">👤 Creator</div>
+                        <div>{game.creator.name} ({game.creator.type})</div>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="animate-pulse grid grid-cols-2 md:grid-cols-4 gap-2">
+                      {[...Array(8)].map((_, i) => (
+                        <div key={i} className="h-12 dark:bg-slate-700 bg-slate-300 rounded"></div>
+                      ))}
+                    </div>
+                  )}
+                </div>
                 <div className="gap-2 flex flex-col md:flex-row md:px-0 px-1">
                   {game ? (
                     <>
