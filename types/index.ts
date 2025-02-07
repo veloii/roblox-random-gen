@@ -6,13 +6,16 @@ export interface Game {
   universeId: number;
   placeId: number;
   image: string;
-  stats: GameStats;
+  
   sourceName: string;
   sourceDescription: string;
   allowedGearGenres: string[];
   allowedGearCategories: string[];
   isGenreEnforced: boolean;
   copyingAllowed: boolean;
+  playing: number;
+  visits: number;
+  maxPlayers: number;
   created: string;
   updated: string;
   studioAccessToApisAllowed: boolean;
@@ -23,9 +26,8 @@ export interface Game {
   genre_l2: string;
   isAllGenre: boolean;
   isFavoritedByUser: boolean;
-  totalUpVotes?: number;
-  totalDownVotes?: number;
-}
+  favoritedCount: game.favoritedCount;
+}         
 
 export interface Creator {
   id: number;
@@ -33,12 +35,4 @@ export interface Creator {
   type: string;
   isRNVAccount: boolean;
   hasVerifiedBadge: boolean;
-}
-
-export interface GameStats {
-  playing: number;
-  visits: number;
-  favoritedCount: number;
-  maxPlayers: number;
-  gamePasses?: number;
 }
