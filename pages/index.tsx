@@ -105,30 +105,38 @@ export default function IndexPage() {
 
       <div className="container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center items-center">
         <div className="max-w-4xl w-full space-y-8">
-          <div className="text-center space-y-4">
+          <div className="text-center space-y-4 text-white">
             <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-red-500 to-red-600 dark:from-red-400 dark:to-red-500 text-transparent bg-clip-text">
               Random Roblox Game
             </h1>
-            <div className="flex items-center justify-center space-x-4 text-lg">
-                made with 💖 by <a
+            <div className="flex items-center justify-center space-x-2 text-lg">
+              <span className="text-black dark:text-white">made with</span>
+              <span>💖</span>
+              <span className="text-black dark:text-white">by</span>
+              <a
                 href="https://github.com/veloii"
-                className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors duration-200"
-                target="_blank"
-              >Veloii</a> and <a
+                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
+              >
+                Veloii
+              </a>
+              <span className="text-black dark:text-white">and</span>
+              <a
                 href="https://github.com/TheEmptynessProject"
                 className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
-                target="_blank"
-              >TheEmptynessProject</a>
-              <span className="text-slate-400">•</span>
+              >
+                TheEmptynessProject
+              </a>
+              <span className="text-slate-400 mx-2">•</span>
               <a
                 href="https://github.com/veloii/roblox-random-gen"
                 className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
-                target="_blank"
               >
                 open source
               </a>
             </div>
           </div>
+        </div>
+      </div>
 
           <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden transition-colors duration-300">
             <div className="md:flex">
