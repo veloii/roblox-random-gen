@@ -1,23 +1,12 @@
 export interface Game {
   name: string;
   creatorName: string;
-  price: number;
+  price: number | null;
   desc: string;
+  image: string;
+  imageToken: string;
   universeId: number;
   placeId: number;
-  image: string;
-  stats: GameStats;
-  totalUpVotes?: number;
-  totalDownVotes?: number;
+  totalUpVotes: number;
+  totalDownVotes: number;
 }
-
-export interface GameStats {
-  playing: number;
-  visits: number;
-  favorites: number;
-  maxPlayers: number;
-  created: string;
-  updated: string;
-  gamePasses: number;
-}
-
