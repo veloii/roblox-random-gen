@@ -123,13 +123,13 @@ export default function IndexPage() {
             </h1>
             <div className="flex gap-2 flex-row-reverse items-center justify-center">
               <p className="text-center dark:text-white text-xl pt-2 transition">
-                made with ❤️ by{" "}
+                edited with ❤️ by{" "}
                 <a
-                  href="https://portfolio-zelr.vercel.app/"
+                  href="https://github.com/TheEmptynessProject"
                   className="text-red-600 hover:text-red-900 transition font-semibold dark:text-red-400 dark:hover:text-red-500"
                   target="_blank"
                 >
-                  zelr
+                  TheEmptynessProject
                 </a>
               </p>
               <p className="text-center pointer-events-none dark:text-white text-xl pt-2 transition">
@@ -137,7 +137,7 @@ export default function IndexPage() {
               </p>
               <p className="text-center dark:text-white text-xl pt-2 transition">
                 <a
-                  href="https://github.com/zelrdev/roblox-random-gen"
+                  href="https://github.com/TheEmptynessProject/roblox-random-gen"
                   className="text-red-600 hover:text-red-900 transition font-semibold dark:text-red-400 dark:hover:text-red-500"
                   target="_blank"
                 >
