@@ -157,12 +157,33 @@ async function getTruelyRandomGame() {
           const imageUrl = await getImage(game.id);
           successGame = {
             name: game.name,
-            creatorName: game.creator.name,
+            creator: game.creator,
             price: game.price,
             desc: game.description,
             universeId: game.id,
             placeId: game.rootPlaceId,
             image: imageUrl,
+            
+            sourceName: game.sourceName,
+            sourceDescription: game.sourceDescription,
+            allowedGearGenres: game.allowedGearGenres,
+            allowedGearCategories: game.allowedGearCategories,
+            isGenreEnforced: game.isGenreEnforced,
+            copyingAllowed: game.copyingAllowed,
+            playing: game.playing,
+            visits: game.visits,
+            maxPlayers: game.maxPlayers,
+            created: game.created,
+            updated: game.updated,
+            studioAccessToApisAllowed: game.studioAccessToApisAllowed,
+            createVipServersAllowed: game.createVipServersAllowed,
+            universeAvatarType: game.universeAvatarType,
+            genre: game.genre,
+            genre_l1: game.genre_l1,
+            genre_l2: game.genre_l2,
+            isAllGenre: game.isAllGenre,
+            isFavoritedByUser: game.isFavoritedByUser,
+            favoritedCount: game.favoritedCount,
           };
         }
       }
