@@ -195,19 +195,19 @@ export default function IndexPage() {
                     <div className="grid grid-cols-2 md:grid-cols-4 gap-2 text-sm">
                       <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
                         <div className="font-medium">👥 Playing</div>
-                        <div>{game.stats.playing.toLocaleString()}</div>
+                        <div>{game.playing.toLocaleString()}</div>
                       </div>
                       <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
                         <div className="font-medium">👀 Visits</div>
-                        <div>{game.stats.visits.toLocaleString()}</div>
+                        <div>{game.visits.toLocaleString()}</div>
                       </div>
                       <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
                         <div className="font-medium">⭐ Favorites</div>
-                        <div>{game.stats.favoritedCount?.toLocaleString() || 'N/A'}</div>
+                        <div>{game.favoritedCount?.toLocaleString() || 'N/A'}</div>
                       </div>
                       <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
                         <div className="font-medium">🎮 Max Players</div>
-                        <div>{game.stats.maxPlayers}</div>
+                        <div>{game.maxPlayers}</div>
                       </div>
                       <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
                         <div className="font-medium">📅 Created</div>
