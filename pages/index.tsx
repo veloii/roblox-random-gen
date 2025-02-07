@@ -110,16 +110,18 @@ export default function IndexPage() {
               Random Roblox Game
             </h1>
             <div className="flex items-center justify-center space-x-4 text-lg">
-              <a
+                made with 💖 by <a
+                href="https://github.com/veloii"
+                className="text-purple-600 hover:text-purple-700 dark:text-purple-400 dark:hover:text-purple-300 transition-colors duration-200"
+                target="_blank"
+              >Veloii</a> and <a
                 href="https://github.com/TheEmptynessProject"
                 className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
                 target="_blank"
-              >
-                by TheEmptynessProject
-              </a>
+              >TheEmptynessProject</a>
               <span className="text-slate-400">•</span>
               <a
-                href="https://github.com/TheEmptynessProject/roblox-random-gen"
+                href="https://github.com/veloii/roblox-random-gen"
                 className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
                 target="_blank"
               >
