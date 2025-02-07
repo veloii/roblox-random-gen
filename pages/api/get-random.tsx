@@ -39,15 +39,6 @@ async function getImage(universeId) {
   return statusCode === 200 ? json.data?.[0]?.imageUrl || null : null;
 }
 
-async function getPlayable(universeId: string) {
-  const { body, statusCode } = await request(
-    `https://games.roblox.com/v1/games/multiget-playability-status?universeIds=${universeId}`
-  );
-  if (statusCode !== 200) return false;
-  const json = await body.json();
-  return json[0].playabilityStatus === "GuestProhibited";
-}
-
 async function getRandomGame() {
   while (true) {
     const universeIds = Array.from({ length: RANDOM_GAME_INT }, () => randomInt(1, MAX_ID_VALUE).toString());
