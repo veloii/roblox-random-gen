@@ -17,7 +17,7 @@ export default function Document() {
 
         <meta
           property="og:url"
-          content="https://roblox-random-game-gen.vercel.app/"
+          content="https://random-roblox-game.vercel.app/"
         />
         <meta property="og:type" content="website" />
         <meta property="og:title" content="Roblox Random Game Generator" />
@@ -30,11 +30,11 @@ export default function Document() {
         <meta name="twitter:card" content="summary_large_image" />
         <meta
           property="twitter:domain"
-          content="roblox-random-game-gen.vercel.app"
+          content="random-roblox-game.vercel.app"
         />
         <meta
           property="twitter:url"
-          content="https://roblox-random-game-gen.vercel.app/"
+          content="https://random-roblox-game.vercel.app/"
         />
         <meta name="twitter:title" content="Roblox Random Game Generator" />
         <meta
