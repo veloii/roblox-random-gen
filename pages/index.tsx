@@ -207,7 +207,7 @@ export default function IndexPage() {
                       </div>
                       <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
                         <div className="font-medium">🎮 Max Players</div>
-                        <div>{game.maxPlayers}</div>
+                        <div>{game.stats.maxPlayers}</div>
                       </div>
                       <div className="bg-slate-100 dark:bg-slate-700 p-2 rounded">
                         <div className="font-medium">📅 Created</div>
