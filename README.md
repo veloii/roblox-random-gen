@@ -9,7 +9,7 @@ If you're coming here from the Github Student Community Exchange I have created 
 
 ## Preview
 
-Preview of site is available at [Random Roblox Game Generator](https://roblox-random-game-gen.vercel.app/).
+Preview of site is available at [random-roblox-game.vercel.app](https://random-roblox-game.vercel.app).
 
 ## Running
 
