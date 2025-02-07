@@ -26,7 +26,7 @@ export interface Game {
   genre_l2: string;
   isAllGenre: boolean;
   isFavoritedByUser: boolean;
-  favoritedCount: game.favoritedCount;
+  favoritedCount: number;
 }         
 
 export interface Creator {
