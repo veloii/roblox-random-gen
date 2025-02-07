@@ -19,15 +19,15 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="keywords"
           content="Roblox, random Roblox game, game generator, play Roblox, Roblox games, randomizer"
         />
-        <meta name="author" content="Your Name" />
+        <meta name="author" content="zelr & TheEmptynessProject" />
 
         <meta property="og:title" content="Roblox Random Game Generator" />
         <meta
           property="og:description"
           content="Find and play random Roblox games instantly! Get surprised with new games every time."
         />
-        <meta property="og:image" content="/images/og-image.jpg" />
-        <meta property="og:url" content="https://yourwebsite.com" />
+        <meta property="og:image" content="/og.png" />
+        <meta property="og:url" content="https://roblox-random-game-gen.vercel.app/" />
         <meta property="og:type" content="website" />
 
         <meta name="twitter:card" content="summary_large_image" />
@@ -36,7 +36,7 @@ function MyApp({ Component, pageProps }: AppProps) {
           name="twitter:description"
           content="Try out a new random Roblox game with just one click!"
         />
-        <meta name="twitter:image" content="/images/twitter-image.jpg" />
+        <meta name="twitter:image" content="/og.png" />
 
         <link rel="icon" href="/favicon.ico" />
       </Head>
