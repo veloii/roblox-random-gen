@@ -13,17 +13,11 @@ export default function IndexPage() {
   const [game, setGame] = useState<Game | undefined>();
   const [cooldown, setCooldown] = useState(false);
   const [copied, setCopied] = useState(false);
-  const [checked, setChecked] = useState(false);
 
   useEffect(() => {
-    const themeToggleDarkIcon = document.getElementById(
-      "theme-toggle-dark-icon"
-    );
-    const themeToggleLightIcon = document.getElementById(
-      "theme-toggle-light-icon"
-    );
+    const themeToggleDarkIcon = document.getElementById("theme-toggle-dark-icon");
+    const themeToggleLightIcon = document.getElementById("theme-toggle-light-icon");
 
-    // Change the icons inside the button based on previous settings
     if (
       localStorage.getItem("color-theme") === "dark" ||
       (!("color-theme" in localStorage) &&
@@ -37,13 +31,10 @@ export default function IndexPage() {
     }
 
     const themeToggleBtn = document.getElementById("theme-toggle");
-
     themeToggleBtn.addEventListener("click", function () {
-      // toggle icons inside button
       themeToggleDarkIcon.classList.toggle("opacity-0");
       themeToggleLightIcon.classList.toggle("opacity-0");
 
-      // if set via local storage previously
       if (localStorage.getItem("color-theme")) {
         if (localStorage.getItem("color-theme") === "light") {
           document.documentElement.classList.add("dark");
@@ -52,8 +43,6 @@ export default function IndexPage() {
           document.documentElement.classList.remove("dark");
           localStorage.setItem("color-theme", "light");
         }
-
-        // if NOT set via local storage previously
       } else {
         if (document.documentElement.classList.contains("dark")) {
           document.documentElement.classList.remove("dark");
@@ -66,11 +55,9 @@ export default function IndexPage() {
     });
   }, []);
 
-  const getRandomGame = async (checked: boolean) => {
+  const getRandomGame = async () => {
     setGame(undefined);
-    const req = await fetch(
-      `/api/get-random?popular=${checked ? "yes" : "no"}`
-    );
+    const req = await fetch("/api/get-random");
     if (!req.ok) return;
     const reqJson = await req.json();
     setCooldown(true);
@@ -79,21 +66,21 @@ export default function IndexPage() {
   };
 
   useEffect(() => {
-    getRandomGame(checked);
+    getRandomGame();
   }, []);
 
   return (
-    <>
-      <div className="md:absolute dark:bg-slate-900 transition top-0 right-0 px-5 pt-3 md:p-5">
+    <div className="min-h-screen bg-gradient-to-b from-slate-50 to-slate-100 dark:from-slate-900 dark:to-slate-800 transition-colors duration-300">
+      <div className="fixed top-0 right-0 p-4">
         <button
           id="theme-toggle"
           type="button"
           aria-label="Light / Dark Mode Toggle"
-          className="text-slate-500 dark:text-slate-400 hover:bg-slate-100 active:opacity-50 dark:hover:bg-slate-700 focus:outline-none transition focus:ring-slate-200 dark:focus:ring-slate-700 rounded-lg text-sm p-2.5"
+          className="text-slate-500 dark:text-slate-400 hover:bg-slate-200/50 dark:hover:bg-slate-700/50 focus:outline-none rounded-full p-2 transition-colors duration-200"
         >
           <svg
             id="theme-toggle-dark-icon"
-            className="w-5 h-5 transition-opacity absolute ease-in-out opacity-0"
+            className="w-6 h-6 transition-opacity absolute opacity-0"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
@@ -102,213 +89,181 @@ export default function IndexPage() {
           </svg>
           <svg
             id="theme-toggle-light-icon"
-            className="w-5 h-5 transition-opacity ease-in-out opacity-0"
+            className="w-6 h-6 transition-opacity opacity-0"
             fill="currentColor"
             viewBox="0 0 20 20"
             xmlns="http://www.w3.org/2000/svg"
           >
             <path
               d="M10 2a1 1 0 011 1v1a1 1 0 11-2 0V3a1 1 0 011-1zm4 8a4 4 0 11-8 0 4 4 0 018 0zm-.464 4.95l.707.707a1 1 0 001.414-1.414l-.707-.707a1 1 0 00-1.414 1.414zm2.12-10.607a1 1 0 010 1.414l-.706.707a1 1 0 11-1.414-1.414l.707-.707a1 1 0 011.414 0zM17 11a1 1 0 100-2h-1a1 1 0 100 2h1zm-7 4a1 1 0 011 1v1a1 1 0 11-2 0v-1a1 1 0 011-1zM5.05 6.464A1 1 0 106.465 5.05l-.708-.707a1 1 0 00-1.414 1.414l.707.707zm1.414 8.486l-.707.707a1 1 0 01-1.414-1.414l.707-.707a1 1 0 011.414 1.414zM4 11a1 1 0 100-2H3a1 1 0 000 2h1z"
-              fill-rule="evenodd"
-              clip-rule="evenodd"
+              fillRule="evenodd"
+              clipRule="evenodd"
             ></path>
           </svg>
         </button>
       </div>
-      <div className="min-h-screen pb-10 md:py-0 w-screen flex justify-center items-center dark:bg-slate-900 transition">
-        <div className="space-y-7">
-          <div>
-            <h1 className="text-3xl pointer-events-none md:text-5xl text-center text-red-600 dark:text-white font-bold transition">
+
+      <div className="container mx-auto px-4 py-8 min-h-screen flex flex-col justify-center items-center">
+        <div className="max-w-4xl w-full space-y-8">
+          <div className="text-center space-y-4 text-white">
+            <h1 className="text-4xl md:text-6xl font-bold bg-gradient-to-r from-red-500 to-red-600 dark:from-red-400 dark:to-red-500 text-transparent bg-clip-text">
               Random Roblox Game
             </h1>
-            <div className="flex gap-2 flex-row-reverse items-center justify-center">
-              <p className="text-center dark:text-white text-xl pt-2 transition">
-                made with ❤️ by{" "}
-                <a
-                  href="https://portfolio-zelr.vercel.app/"
-                  className="text-red-600 hover:text-red-900 transition font-semibold dark:text-red-400 dark:hover:text-red-500"
-                  target="_blank"
-                >
-                  zelr
-                </a>
-              </p>
-              <p className="text-center pointer-events-none dark:text-white text-xl pt-2 transition">
-                -
-              </p>
-              <p className="text-center dark:text-white text-xl pt-2 transition">
-                <a
-                  href="https://github.com/zelrdev/roblox-random-gen"
-                  className="text-red-600 hover:text-red-900 transition font-semibold dark:text-red-400 dark:hover:text-red-500"
-                  target="_blank"
-                >
-                  open source
-                </a>
-              </p>
+            <div className="flex items-center justify-center space-x-2 text-lg">
+              <span className="text-black dark:text-white">made with</span>
+              <span>💖</span>
+              <span className="text-black dark:text-white">by</span>
+              <a
+                href="https://github.com/veloii"
+                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
+              >
+                Veloii
+              </a>
+              <span className="text-black dark:text-white">and</span>
+              <a
+                href="https://github.com/TheEmptynessProject"
+                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
+              >
+                TheEmptynessProject
+              </a>
+              <span className="text-slate-400 mx-2">•</span>
+              <a
+                href="https://github.com/veloii/roblox-random-gen"
+                className="text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors duration-200"
+              >
+                open source
+              </a>
             </div>
           </div>
-          <div className="flex px-5 md:px-0 justify-center items-center">
-            <div className="bg-slate-50 w-full border px-1 md:px-0 pt-4 md:pt-0 dark:border-slate-700 dark:text-white dark:bg-slate-800 items-center md:items-start rounded-2xl flex flex-col md:flex-row gap-4 transition">
+
+          <div className="bg-white dark:bg-slate-800 rounded-3xl shadow-xl overflow-hidden transition-colors duration-300">
+            <div className="md:flex">
               {game ? (
-                <Image
-                  alt="Roblox Game Thumbnail"
-                  draggable="false"
-                  layout="fixed"
-                  height={180}
-                  width={180}
-                  className="md:rounded-r-none rounded-2xl object-fill shadow dark:bg-slate-700 bg-slate-300"
-                  src={game?.image}
-                />
+                <div className="md:w-72 md:h-72 relative">
+                  <Image
+                    alt="Roblox Game Thumbnail"
+                    layout="fill"
+                    objectFit="cover"
+                    className="w-full h-full"
+                    src={game?.image}
+                  />
+                </div>
               ) : (
-                <div className="animate-pulse h-[180px] w-[180px] md:rounded-r-none rounded-2xl dark:bg-slate-700 bg-slate-300"></div>
+                <div className="md:w-72 md:h-72 animate-pulse bg-slate-200 dark:bg-slate-700" />
               )}
-              <div className="space-y-2 p-4 px-2">
-                <div className="pointer-events-none">
+
+              <div className="p-6 md:p-8 flex-1">
+                <div className="space-y-6">
                   {game ? (
-                    <h2
-                      className={`font-bold md:text-xl w-[300px] md:w-[500px]`}
-                    >
+                    <h2 className="text-2xl font-bold text-slate-900 dark:text-white">
                       {game?.name}
                     </h2>
                   ) : (
-                    <div className="animate-pulse w-[300px] md:w-[500px] h-7 dark:bg-slate-700 bg-slate-300 rounded"></div>
+                    <div className="h-8 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
                   )}
-                </div>
-                <div className="pointer-events-none">
-                  <p className="text-ellipsis md:w-[500px] w-full h-24 md:h-16 overflow-x-auto overflow-y-auto whitespace-pre-wrap text-sm">
+
+                  <div className="h-24 overflow-y-auto">
                     {game ? (
-                      game?.desc ? (
-                        game?.desc
-                      ) : (
-                        "No description"
-                      )
+                      <p className="text-slate-600 dark:text-slate-300">
+                        {game?.desc || "No description available"}
+                      </p>
                     ) : (
-                      <div className="space-y-1">
-                        <div className="animate-pulse w-1/6 h-4 dark:bg-slate-700 bg-slate-300 rounded"></div>
-                        <div className="animate-pulse w-full h-4 dark:bg-slate-700 bg-slate-300 rounded"></div>
-                        <div className="animate-pulse w-5/6 h-4 dark:bg-slate-700 bg-slate-300 rounded"></div>
+                      <div className="space-y-2">
+                        <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
+                        <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse w-3/4" />
+                        <div className="h-4 bg-slate-200 dark:bg-slate-700 rounded animate-pulse w-1/2" />
                       </div>
                     )}
-                  </p>
-                </div>
-                <div className="gap-2 flex flex-col md:flex-row md:px-0 px-1">
+                  </div>
+
                   {game ? (
-                    <>
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      <StatCard icon="👥" label="Playing" value={game.playing.toLocaleString()} />
+                      <StatCard icon="👀" label="Visits" value={game.visits.toLocaleString()} />
+                      <StatCard icon="⭐" label="Favorites" value={game.favoritedCount?.toLocaleString() || 'N/A'} />
+                      <StatCard icon="🎮" label="Max Players" value={game.maxPlayers} />
+                      <StatCard icon="📅" label="Created" value={new Date(game.created).toLocaleDateString()} />
+                      <StatCard icon="🔄" label="Updated" value={new Date(game.updated).toLocaleDateString()} />
+                      <StatCard icon="🎨" label="Genre" value={game.genre_l2 || game.genre_l1 || game.genre} />
+                      <StatCard icon="👤" label="Creator" value={`${game.creator.name} (${game.creator.type})`} />
+                    </div>
+                  ) : (
+                    <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+                      {[...Array(8)].map((_, i) => (
+                        <div key={i} className="h-16 bg-slate-200 dark:bg-slate-700 rounded animate-pulse" />
+                      ))}
+                    </div>
+                  )}
+
+                  {game && (
+                    <div className="flex flex-col md:flex-row gap-3">
                       <a
-                        draggable="false"
-                        className="dark:bg-green-700 flex-grow md:flex-grow-0 justify-center active:opacity-50 bg-green-500 hover:bg-green-400 flex gap-2 items-center dark:hover:bg-green-500 font-semibold duration-300 transition p-2 px-6 rounded-xl text-white"
                         href={`roblox://placeId=${game.placeId}`}
+                        className="flex items-center justify-center gap-2 bg-green-500 hover:bg-green-600 text-white px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
                       >
-                        <PlayIcon height={20} /> Play
+                        <PlayIcon className="w-5 h-5" />
+                        Play Now
                       </a>
                       <a
-                        draggable="false"
-                        target="_blank"
-                        className="dark:bg-slate-700 flex-grow md:flex-grow-0 justify-center active:opacity-50 flex gap-2 items-center dark:hover:bg-slate-500 bg-slate-200 hover:bg-slate-300 font-semibold duration-300 transition p-2 px-4 rounded-xl dark:text-white"
                         href={`https://www.roblox.com/games/${game.placeId}`}
+                        target="_blank"
+                        className="flex items-center justify-center gap-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
                       >
-                        <ArrowUpRightIcon height={20} /> Open Link
+                        <ArrowUpRightIcon className="w-5 h-5" />
+                        View Details
                       </a>
                       <button
-                        aria-label="Play"
-                        draggable="false"
-                        className="dark:bg-slate-700 flex-grow md:flex-grow-0 justify-center active:opacity-50 bg-slate-200 hover:bg-slate-300 cursor-pointer flex gap-2 items-center dark:hover:bg-slate-500 font-semibold duration-300 transition p-2 px-4 rounded-xl dark:text-white"
                         onClick={() => {
                           setCopied(true);
-                          navigator.clipboard.writeText(
-                            `https://www.roblox.com/games/${game.placeId}`
-                          );
+                          navigator.clipboard.writeText(`https://www.roblox.com/games/${game.placeId}`);
                           setTimeout(() => setCopied(false), 1000);
                         }}
+                        className="flex items-center justify-center gap-2 bg-slate-200 dark:bg-slate-700 hover:bg-slate-300 dark:hover:bg-slate-600 px-6 py-3 rounded-xl font-semibold transition-colors duration-200"
                       >
-                        <CheckIcon
-                          className={`absolute ${
-                            copied ? "opacity-100" : "opacity-0"
-                          } transition`}
-                          height={20}
-                        />
-                        <ClipboardIcon
-                          className={`${
-                            copied ? "opacity-0" : "opacity-100"
-                          } transition`}
-                          height={20}
-                        />
+                        {copied ? (
+                          <CheckIcon className="w-5 h-5" />
+                        ) : (
+                          <ClipboardIcon className="w-5 h-5" />
+                        )}
+                        {copied ? "Copied!" : "Copy Link"}
                       </button>
-                    </>
-                  ) : (
-                    <>
-                      <div className="animate-pulse flex-grow md:flex-grow-0 md:w-28 h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
-                      <div className="animate-pulse flex-grow md:flex-grow-0 md:w-[8.5rem] h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
-                      <div className="animate-pulse flex-grow md:flex-grow-0 md:w-12 h-10 dark:bg-slate-700 bg-slate-300 rounded-xl"></div>
-                    </>
+                    </div>
                   )}
                 </div>
               </div>
             </div>
           </div>
-          <div className="flex flex-col gap-2 justify-center items-center">
-            <div className="flex justify-center">
-              <div className="relative inline-block w-10 mr-2 align-middle select-none">
-                <input
-                  type="checkbox"
-                  name="toggle"
-                  onChange={(event) => {
-                    setChecked(event.target.checked);
-                    getRandomGame(event.target.checked);
-                  }}
-                  id="toggle"
-                  checked={checked}
-                  className="checked:bg-red-500 transition-all ease-in-out dark:checked:bg-red-500 outline-none focus:outline-none right-4 checked:right-0 duration-200 absolute block w-6 h-6 rounded-full dark:bg-slate-900 bg-white border-4 dark:border-slate-700 appearance-none cursor-pointer"
-                />
-                <label
-                  aria-label="Frontpage games only toggle"
-                  htmlFor="toggle"
-                  className="block h-6 overflow-hidden bg-slate-300 dark:bg-slate-800 rounded-full cursor-pointer"
-                ></label>
-              </div>
-              <span
-                aria-label="Frontpage games only toggle"
-                className="font-medium text-slate-400 pointer-events-none"
-              >
-                Frontpage games only
-              </span>
-            </div>
+
+          <div className="flex justify-center">
             <button
-              aria-label="New Game"
+              onClick={getRandomGame}
               disabled={cooldown}
-              className={`dark:bg-red-900 relative group disabled:pointer-events-none disabled:opacity-50 mt-5 dark:hover:bg-red-700 bg-red-500 hover:bg-red-400 flex gap-2 items-center active:opacity-50 font-semibold duration-300 transition p-3 px-6 rounded-2xl text-white ${
-                !game && "pointer-events-none"
-              }`}
-              onClick={() => getRandomGame(checked)}
+              className="group relative flex items-center gap-2 bg-gradient-to-r from-red-500 to-red-600 hover:from-red-600 hover:to-red-700 disabled:from-red-400 disabled:to-red-500 text-white px-8 py-4 rounded-2xl font-semibold transition-all duration-200 shadow-lg hover:shadow-xl"
             >
-              <div
-                role="status"
-                className={`dark:bg-red-900 bg-red-500 group-disabled:dark:bg-opacity-50 transition-opacity ease-in-out duration-300 w-[117px] absolute top-3 ${
-                  game ? "opacity-0" : "opacity-100"
-                }`}
-              >
-                <svg
-                  aria-hidden="true"
-                  className=" h-6 w-[117px] animate-spin text-transparent fill-white"
-                  viewBox="0 0 100 101"
-                  fill="none"
-                  xmlns="http://www.w3.org/2000/svg"
-                >
+              {!game ? (
+                <svg className="animate-spin h-5 w-5" viewBox="0 0 24 24">
+                  <circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" fill="none" />
                   <path
-                    d="M100 50.5908C100 78.2051 77.6142 100.591 50 100.591C22.3858 100.591 0 78.2051 0 50.5908C0 22.9766 22.3858 0.59082 50 0.59082C77.6142 0.59082 100 22.9766 100 50.5908ZM9.08144 50.5908C9.08144 73.1895 27.4013 91.5094 50 91.5094C72.5987 91.5094 90.9186 73.1895 90.9186 50.5908C90.9186 27.9921 72.5987 9.67226 50 9.67226C27.4013 9.67226 9.08144 27.9921 9.08144 50.5908Z"
+                    className="opacity-75"
                     fill="currentColor"
-                  />
-                  <path
-                    d="M93.9676 39.0409C96.393 38.4038 97.8624 35.9116 97.0079 33.5539C95.2932 28.8227 92.871 24.3692 89.8167 20.348C85.8452 15.1192 80.8826 10.7238 75.2124 7.41289C69.5422 4.10194 63.2754 1.94025 56.7698 1.05124C51.7666 0.367541 46.6976 0.446843 41.7345 1.27873C39.2613 1.69328 37.813 4.19778 38.4501 6.62326C39.0873 9.04874 41.5694 10.4717 44.0505 10.1071C47.8511 9.54855 51.7191 9.52689 55.5402 10.0491C60.8642 10.7766 65.9928 12.5457 70.6331 15.2552C75.2735 17.9648 79.3347 21.5619 82.5849 25.841C84.9175 28.9121 86.7997 32.2913 88.1811 35.8758C89.083 38.2158 91.5421 39.6781 93.9676 39.0409Z"
-                    fill="currentFill"
+                    d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"
                   />
                 </svg>
-                <span className="sr-only">Loading...</span>
-              </div>
-              <PlusIcon height={24} /> New Game
+              ) : (
+                <PlusIcon className="w-5 h-5" />
+              )}
+              {!game ? "Loading..." : "New Game"}
             </button>
           </div>
         </div>
       </div>
-    </>
+    </div>
   );
 }
+
+const StatCard = ({ icon, label, value }) => (
+  <div className="bg-slate-50 dark:bg-slate-700/50 p-3 rounded-xl">
+    <div className="text-sm font-medium text-slate-600 dark:text-slate-300">{icon} {label}</div>
+    <div className="text-slate-900 dark:text-white font-medium mt-1">{value}</div>
+  </div>
+);

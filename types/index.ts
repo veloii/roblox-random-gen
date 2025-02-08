@@ -1,12 +1,38 @@
 export interface Game {
   name: string;
-  creatorName: string;
+  creator: Creator;
   price: number | null;
   desc: string;
-  image: string;
-  imageToken: string;
   universeId: number;
   placeId: number;
-  totalUpVotes: number;
-  totalDownVotes: number;
+  image: string;
+  
+  sourceName: string;
+  sourceDescription: string;
+  allowedGearGenres: string[];
+  allowedGearCategories: string[];
+  isGenreEnforced: boolean;
+  copyingAllowed: boolean;
+  playing: number;
+  visits: number;
+  maxPlayers: number;
+  created: string;
+  updated: string;
+  studioAccessToApisAllowed: boolean;
+  createVipServersAllowed: boolean;
+  universeAvatarType: string;
+  genre: string;
+  genre_l1: string;
+  genre_l2: string;
+  isAllGenre: boolean;
+  isFavoritedByUser: boolean;
+  favoritedCount: number;
+}         
+
+export interface Creator {
+  id: number;
+  name: string;
+  type: string;
+  isRNVAccount: boolean;
+  hasVerifiedBadge: boolean;
 }

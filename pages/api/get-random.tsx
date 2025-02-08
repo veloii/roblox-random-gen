@@ -4,216 +4,87 @@ import { request } from "undici";
 import { Game } from "../../types";
 import cacheData from "memory-cache";
 
+const MAX_ID_VALUE = 12_000_000_000;
+const MAX_TIME = 24 * 1000 * 60 * 60;
+const RANDOM_GAME_INT = 75;
+
 async function fetchWithCache(url) {
-  const value = cacheData.get(url);
-  if (value) {
-    return value;
-  } else {
-    const hours = 24;
-    const res = await request(url);
-    const json = await res.body.json();
-    cacheData.put(
-      url,
-      { statusCode: res.statusCode, json },
-      hours * 1000 * 60 * 60
-    );
-    return { statusCode: res.statusCode, json };
-  }
+  const cached = cacheData.get(url);
+  if (cached) return cached;
+  const res = await request(url);
+  const json = await res.body.json();
+  cacheData.put(url, { statusCode: res.statusCode, json }, MAX_TIME);
+  return { statusCode: res.statusCode, json };
 }
 
-const rand = (items) => items[(items.length * Math.random()) | 0];
+const randomInt = (min, max) => Math.floor(Math.random() * (max - min + 1) + min);
 
 function randomIntFromInterval(min: number, max: number) {
   return Math.floor(Math.random() * (max - min + 1) + min);
 }
 
-async function getSorts() {
-  const { json, statusCode } = await fetchWithCache(
-    "https://games.roblox.com/v1/games/sorts"
-  );
-  if (statusCode !== 200) return false;
-  return json.sorts.map((sort) => sort.token);
-}
-
-async function getUniverseId(universeId: string) {
+async function getUniverseId(universeId) {
   const { body, statusCode } = await request(
     `https://games.roblox.com/v1/games?universeIds=${universeId}`
   );
+  if (statusCode !== 200) return null;
   const json = await body.json();
-  if (statusCode !== 200) {
-    return false;
-  }
-  return json.data[0];
+  return json.data?.[0] || null;
 }
 
-async function getImage(universeId: string) {
+async function getImage(universeId) {
   const { json, statusCode } = await fetchWithCache(
     `https://thumbnails.roblox.com/v1/games/icons?universeIds=${universeId}&size=150x150&format=Png&isCircular=false`
   );
-  if (statusCode !== 200) return false;
-  return json.data[0].imageUrl;
+  return statusCode === 200 ? json.data?.[0]?.imageUrl || null : null;
 }
 
-async function getPlayable(universeId: string) {
-  const { body, statusCode } = await request(
-    `https://games.roblox.com/v1/games/multiget-playability-status?universeIds=${universeId}`
-  );
-  if (statusCode !== 200) return false;
-  const json = await body.json();
-  return json[0].playabilityStatus === "GuestProhibited";
-}
+async function getRandomGame() {
+  while (true) {
+    const universeIds = Array.from({ length: RANDOM_GAME_INT }, () => randomInt(1, MAX_ID_VALUE).toString());
+    const games = await Promise.allSettled(universeIds.map(getUniverseId));
 
-async function getTruelyRandomGame() {
-  let successGame = undefined;
+    for (const result of games) {
+      if (result.status === "fulfilled" && result.value) {
+        const game = result.value;
+        const imageUrl = await getImage(game.id);
 
-  const gamesList = [
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-    getUniverseId(randomIntFromInterval(1, 8915048233).toString()),
-  ];
-
-  const games = await Promise.all(gamesList);
-
-  for (const game of games) {
-    if (game) {
-      if (!game.name.includes("Place")) {
-        const playable = await getPlayable(game.id.toString());
-        if (playable) {
-          const imageUrl = await getImage(game.id);
-          successGame = {
+        return {
             name: game.name,
-            creatorName: game.creator.name,
+            creator: game.creator,
             price: game.price,
             desc: game.description,
             universeId: game.id,
             placeId: game.rootPlaceId,
             image: imageUrl,
+            
+            sourceName: game.sourceName,
+            sourceDescription: game.sourceDescription,
+            allowedGearGenres: game.allowedGearGenres,
+            allowedGearCategories: game.allowedGearCategories,
+            isGenreEnforced: game.isGenreEnforced,
+            copyingAllowed: game.copyingAllowed,
+            playing: game.playing,
+            visits: game.visits,
+            maxPlayers: game.maxPlayers,
+            created: game.created,
+            updated: game.updated,
+            studioAccessToApisAllowed: game.studioAccessToApisAllowed,
+            createVipServersAllowed: game.createVipServersAllowed,
+            universeAvatarType: game.universeAvatarType,
+            genre: game.genre,
+            genre_l1: game.genre_l1,
+            genre_l2: game.genre_l2,
+            isAllGenre: game.isAllGenre,
+            isFavoritedByUser: game.isFavoritedByUser,
+            favoritedCount: game.favoritedCount,
           };
-        }
       }
     }
   }
-  if (!successGame) return getTruelyRandomGame();
-
-  return successGame;
 }
 
-export default async function handler(
-  req: NextApiRequest,
-  res: NextApiResponse
-) {
-  const popular = req.query["popular"] === "yes";
-
-  if (popular) {
-    const sorts = await getSorts();
-    if (!sorts) return res.status(500);
-
-    const categories = await Promise.all(
-      sorts.map(async (sort) => {
-        const params = new URLSearchParams({
-          "model.sortToken": sort,
-        }).toString();
-
-        let { statusCode, json } = await fetchWithCache(
-          `https://games.roblox.com/v1/games/list?${params}`
-        );
-        if (statusCode !== 200) return;
-
-        const games = json.games.map((game) => ({
-          name: game.name,
-          creatorName: game.creatorName,
-          price: game.price,
-          desc: game.gameDescription,
-          imageToken: game.imageToken,
-          universeId: game.universeId,
-          placeId: game.placeId,
-          totalUpVotes: game.totalUpVotes,
-          totalDownVotes: game.totalDownVotes,
-        }));
-        return games;
-      })
-    );
-    const rawGame = rand(rand(categories));
-    const imageUrl = await getImage(rawGame.universeId);
-    const game: Game = { ...rawGame, image: imageUrl };
-
-    return res.status(200).json(game);
-  } else {
-    const game = await getTruelyRandomGame();
-
-    return res.status(200).json(game);
-  }
+export default async function handler(req: NextApiRequest, res: NextApiResponse) {
+  const game = await getRandomGame();
+  res.status(200).json(game);
 }
