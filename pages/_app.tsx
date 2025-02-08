@@ -37,8 +37,6 @@ function MyApp({ Component, pageProps }: AppProps) {
           content="Try out a new random Roblox game with just one click!"
         />
         <meta name="twitter:image" content="/og.png" />
-
-        <link rel="icon" href="/favicon.ico" />
       </Head>
 
       <Component {...pageProps} />
